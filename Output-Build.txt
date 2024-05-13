@@ -1,0 +1,5 @@
+﻿Build started at 2:25 AM...
+1>------ Build started: Project: Week1EFIntroduction, Configuration: Debug Any CPU ------
+1>  Week1EFIntroduction -> C:\Users\pc\OneDrive - GUSCanada\Term-3 May 2024\Design Pattern\Week1EFIntroduction\bin\Debug\Week1EFIntroduction.exe
+========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
+========== Build completed at 2:25 AM and took 01.857 seconds ==========
