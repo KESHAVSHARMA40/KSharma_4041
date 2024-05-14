@@ -50,5 +50,14 @@ namespace Week1EFIntroduction
             grdBooks.ItemsSource = books;
 
         }
+
+        private void btnClearData_Click(object sender, RoutedEventArgs e)
+        {
+            txtId.Text = "";
+            txtTitle.Text = "";
+            txtPrice.Text = "";
+            grdBooks.ItemsSource = null;
+
+        }
     }
 }
