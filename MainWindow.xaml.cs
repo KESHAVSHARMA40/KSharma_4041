@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -12,52 +8,72 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml.Linq;
 
-namespace Week1EFIntroduction
+namespace Practise_Application
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
-    {           
+    {
+        BlogContext db = new BlogContext();
 
-        BookDBEntities db = new BookDBEntities();
+        public Post selectedItem { get; private set; }
+
         public MainWindow()
         {
             InitializeComponent();
         }
 
-        private void btnLoadData_Click(object sender, RoutedEventArgs e)
+        private void dataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var books = db.Books.ToList();
-            grdBooks.ItemsSource = books;
-
         }
 
-        private void btnInsert_Click(object sender, RoutedEventArgs e)
+        private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
-            Book newBook = new Book();
-            newBook.Title = txtTitle.Text;
-            newBook.Price = decimal.Parse(txtPrice.Text);
-
-            db.Books.Add(newBook);
-            db.SaveChanges();
-
-            txtTitle.Text = "";
-            txtPrice.Text = "";
-
-            var books = db.Books.ToList();
-            grdBooks.ItemsSource = books;
-
+            var blogs = db.Blogs.ToList();
+            dataGrid.ItemsSource = blogs;
+           
         }
 
-        private void btnClearData_Click(object sender, RoutedEventArgs e)
+        private void BtnEdit_Click(object sender, RoutedEventArgs e)
         {
-            txtId.Text = "";
-            txtTitle.Text = "";
-            txtPrice.Text = "";
-            grdBooks.ItemsSource = null;
+            // Add your edit logic here
 
+           
+        }
+
+        private void BtnDelete_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedItem = listView.SelectedItem;
+
+            // Check if an item is selected
+            if (selectedItem != null)
+            {
+                // Check the type of the selected item
+                if (selectedItem is Blog blog)
+                {
+                    // Delete blog logic here
+                    db.Blogs.Remove(blog);
+                    db.SaveChanges();
+                }
+                else if (selectedItem is Post post)
+                {
+                    // Delete post logic here
+                    db.Posts.Remove(post);
+                    db.SaveChanges();
+                }
+                else if (selectedItem is Comment comment)
+                {
+                    // Delete comment logic here
+                    db.Comments.Remove(comment);
+                    db.SaveChanges();
+                }
+            }
         }
     }
-}
+    }
+
+
+       

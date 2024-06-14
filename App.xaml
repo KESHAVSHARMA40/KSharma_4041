@@ -1,7 +1,7 @@
-﻿<Application x:Class="Week1EFIntroduction.App"
+﻿<Application x:Class="Practise_Application.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:Week1EFIntroduction"
+             xmlns:local="clr-namespace:Practise_Application"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
          
