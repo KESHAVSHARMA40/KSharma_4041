@@ -2,7 +2,7 @@
 using System.Data;
 using System.Windows;
 
-namespace Assignment1_KeshavSharma_4532854
+namespace W5CodeFirst
 {
     /// <summary>
     /// Interaction logic for App.xaml

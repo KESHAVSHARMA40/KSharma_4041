@@ -1,62 +1,128 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.ObjectModel;
-using System.Diagnostics.Eventing.Reader;
-using System.Linq;
+﻿using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
 
-namespace Assignment1_KeshavSharma_4532854
+namespace W5CodeFirst
 {
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
     public partial class MainWindow : Window
     {
-        ProductContext db = new ProductContext();
+
+        // declare the context class object
+        BooksContext db = new BooksContext();  
         public MainWindow()
         {
-            InitializeComponent();
-        }
-        private void LoadGrid()
-        {
-            var products = db.Products.ToList();
-            GridProducts.ItemsSource = products;
-
-        }
-        private void LoadProducts()
-        {
-          var categories = db.Categories.ToList();
-            GridProducts.ItemsSource = categories;
+          InitializeComponent();
         }
 
-        private void ButtonClearData_Click(object sender, RoutedEventArgs e)
+        private void btnLoadData_Click(object sender, RoutedEventArgs e)
         {
+            /*var books = db.Books.ToList();
+            grdBooks.ItemsSource = books;
+            */
+            // or we can use this
+
+            grdBooks.ItemsSource = db.Books.ToList();
+        }
+
+        private void btnInsert_Click(object sender, RoutedEventArgs e)
+        {
+            Book book = new Book();
+            book.Title = txtTitle.Text;
+            book.Price = decimal.Parse(txtPrice.Text);
+            book.Quantity = 5;
+            db.Books.Add(book);
+
+            db.SaveChanges();
+
+            grdBooks.ItemsSource = db.Books.ToList();
+            MessageBox.Show("New Book added");
 
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void btnUpdate_Click(object sender, RoutedEventArgs e)
         {
-            LoadGrid();
+            int id = int.Parse(txtId.Text);
+            var book = db.Books.Find(id); //week6
 
-        }
-
-        private void ComboBoxCategories_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            if (ComboBox.SelectedValue is int selectedCategoryId)
+            if (book != null)
             {
-                var products = db.Products.Where(p => p.CategoryId == selectedCategoryId).ToList();
-                ComboBox.ItemsSource = products;
-                LoadGrid();
-                LoadProducts();
+                book.Title = txtTitle.Text;
+                book.Price = decimal.Parse(txtPrice.Text);
+                book.Quantity = 10;
+
+                grdBooks.ItemsSource = db.Books.ToList();
+                db.SaveChanges();
+                MessageBox.Show("Book Updated");
+            }
+            else
+            {
+
+                MessageBox.Show("Invalid Id Please try again");
+                grdBooks.ItemsSource = db.Books.ToList();
+            }
             }
 
-
-        }
-
-        private void ButtonSearchProduct_Click(object sender, RoutedEventArgs e)
+        private void btnDelete_Click(object sender, RoutedEventArgs e)
         {
-            string searchText = (string)TextBoxSearch.DataContext;
-            var products = db.Products.Where(p => p.ProductName.ToLower().Contains(searchText)).ToList();
-            GridProducts.ItemsSource = products;
-            LoadGrid();
+
+            int id = int.Parse(txtId.Text);
+            var book = db.Books.Find(id); //week6
+
+            if (book != null)
+            {
+               db.Books.Remove(book);
+
+                grdBooks.ItemsSource = db.Books.ToList();
+                db.SaveChanges();
+                MessageBox.Show("Book Deleted");
+            }
+            else
+            {
+
+                MessageBox.Show("Invalid Id Please try again");
+                grdBooks.ItemsSource = db.Books.ToList();
+            }
+        }
+
+        private void btnFind_Click(object sender, RoutedEventArgs e)
+        {
+            int id = int.Parse(txtId.Text);
+            var book = db.Books.Find(id); //week6
+
+            if (book != null)
+            {
+                txtTitle.Text = book.Title;
+                txtPrice.Text = book.Price.ToString();
+                
+            }
+            else
+            {
+                txtTitle.Text = txtPrice.Text ="";
+                MessageBox.Show("Invalid Id Please try again");
+                grdBooks.ItemsSource = db.Books.ToList();
+            }
+        }
+
+        private void btnSearch_Click(object sender, RoutedEventArgs e)
+        {
+            var books = (from book in db.Books
+                        where book.Title.Contains(txtTitle.Text)
+                        select book).ToList(); // week6
+
+            if (books.Count > 0)
+                grdBooks.ItemsSource = books;
+            else
+                MessageBox.Show("No Book Found");
         }
     }
-    }
+}
