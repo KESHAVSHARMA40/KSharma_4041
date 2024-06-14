@@ -1,79 +1,62 @@
-﻿using System.Text;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.ObjectModel;
+using System.Diagnostics.Eventing.Reader;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Xml.Linq;
 
-namespace Practise_Application
+namespace Assignment1_KeshavSharma_4532854
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
-        BlogContext db = new BlogContext();
-
-        public Post selectedItem { get; private set; }
-
+        ProductContext db = new ProductContext();
         public MainWindow()
         {
             InitializeComponent();
         }
-
-        private void dataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void LoadGrid()
         {
+            var products = db.Products.ToList();
+            GridProducts.ItemsSource = products;
+
+        }
+        private void LoadProducts()
+        {
+          var categories = db.Categories.ToList();
+            GridProducts.ItemsSource = categories;
         }
 
-        private void BtnAdd_Click(object sender, RoutedEventArgs e)
+        private void ButtonClearData_Click(object sender, RoutedEventArgs e)
         {
-            var blogs = db.Blogs.ToList();
-            dataGrid.ItemsSource = blogs;
-           
+
         }
 
-        private void BtnEdit_Click(object sender, RoutedEventArgs e)
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
-            // Add your edit logic here
+            LoadGrid();
 
-           
         }
 
-        private void BtnDelete_Click(object sender, RoutedEventArgs e)
+        private void ComboBoxCategories_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            var selectedItem = listView.SelectedItem;
-
-            // Check if an item is selected
-            if (selectedItem != null)
+            if (ComboBox.SelectedValue is int selectedCategoryId)
             {
-                // Check the type of the selected item
-                if (selectedItem is Blog blog)
-                {
-                    // Delete blog logic here
-                    db.Blogs.Remove(blog);
-                    db.SaveChanges();
-                }
-                else if (selectedItem is Post post)
-                {
-                    // Delete post logic here
-                    db.Posts.Remove(post);
-                    db.SaveChanges();
-                }
-                else if (selectedItem is Comment comment)
-                {
-                    // Delete comment logic here
-                    db.Comments.Remove(comment);
-                    db.SaveChanges();
-                }
+                var products = db.Products.Where(p => p.CategoryId == selectedCategoryId).ToList();
+                ComboBox.ItemsSource = products;
+                LoadGrid();
+                LoadProducts();
             }
+
+
+        }
+
+        private void ButtonSearchProduct_Click(object sender, RoutedEventArgs e)
+        {
+            string searchText = (string)TextBoxSearch.DataContext;
+            var products = db.Products.Where(p => p.ProductName.ToLower().Contains(searchText)).ToList();
+            GridProducts.ItemsSource = products;
+            LoadGrid();
         }
     }
     }
-
-
-       

@@ -2,7 +2,7 @@
 using System.Data;
 using System.Windows;
 
-namespace Practise_Application
+namespace Assignment1_KeshavSharma_4532854
 {
     /// <summary>
     /// Interaction logic for App.xaml
